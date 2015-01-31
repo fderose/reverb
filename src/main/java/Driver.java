@@ -8,14 +8,21 @@ import java.util.stream.Collectors;
 public class Driver {
 
   public static void main(String[] args) throws TwitterException, ApiException {
+
+    if (args.length != 1) {
+      System.out.println("Usage: Driver <username>");
+      System.exit(-1);
+    }
+    String username = args[0];
+
     TwitterService twitterService = new TwitterService();
     WordnikService wordnikService = new WordnikService();
     SortedMap<String, List<Definition>> definitionMap = new TreeMap<>(new WordComparator());
 
-    for (String tweet : twitterService.getTweetsForUser("fjderose")) {
+    for (String tweet : twitterService.getTweetsForUser(username)) {
       List<String> tweetWords = Arrays.asList(tweet.split(" "));
       List<String> filteredWords = tweetWords.stream().
-        filter(w -> !StopWords.getStopWords().contains(w.toLowerCase())).
+        filter(w -> !StopWords.getStopWords().contains(w.toLowerCase()) && !definitionMap.keySet().contains(w)).
         collect(Collectors.toList());
       for (String tweetWord : filteredWords) {
         definitionMap.put(tweetWord, wordnikService.getDefinitions(tweetWord));
