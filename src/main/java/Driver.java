@@ -2,12 +2,13 @@ import com.wordnik.client.common.ApiException;
 import com.wordnik.client.model.Definition;
 import twitter4j.TwitterException;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Driver {
 
-  public static void main(String[] args) throws TwitterException, ApiException {
+  public static void main(String[] args) throws TwitterException, ApiException, IOException {
 
     if (args.length != 1) {
       System.out.println("Usage: Driver <username>");
@@ -20,10 +21,10 @@ public class Driver {
     SortedMap<String, List<Definition>> definitionMap = new TreeMap<>(new WordComparator());
 
     for (String tweet : twitterService.getTweetsForUser(username)) {
-      List<String> tweetWords = Arrays.asList(tweet.split(" "));
+      List<String> tweetWords = Arrays.asList(tweet.split("[ \n\t]+"));
       List<String> filteredWords = tweetWords.stream().
         filter(w -> !StopWords.getStopWords().contains(w.toLowerCase()) && !w.startsWith("http://") && !definitionMap.keySet().contains(w)).
-        map(w -> w.replaceAll("[.,?!#@]", "")).
+        map(w -> w.replaceAll("[.,?!#@:]", "")).
         filter(w -> !w.isEmpty()).
         collect(Collectors.toList());
       for (String tweetWord : filteredWords) {
