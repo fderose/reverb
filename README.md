@@ -15,3 +15,5 @@ First, words that start with q ordered alphabetically without respect to case.
 Then, all other words ordered alphabetically without respect to case.
 
 Language support level is Java 8 (so I can use stream functionality).
+
+The app.properties file contains both the oauth properties for Twitter and the apiKey for Wordnik.
