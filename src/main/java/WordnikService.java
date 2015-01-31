@@ -2,14 +2,16 @@ import com.wordnik.client.common.ApiException;
 import com.wordnik.client.common.ApiInvoker;
 import com.wordnik.client.model.Definition;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WordnikService {
 
+  private final Properties properties;
   private final ApiInvoker apiInvoker = ApiInvoker.getInstance();
+
+  public WordnikService(Properties properties) {
+    this.properties = properties;
+  }
 
   public List<Definition> getDefinitions(String word, String partOfSpeech, String sourceDictionaries, Integer limit, String includeRelated, String useCanonical, String includeTags, String apiKey) throws ApiException {
     // create path and map variables
@@ -51,9 +53,10 @@ public class WordnikService {
 
   public List<Definition> getDefinitions(String word) throws ApiException {
     List<Definition> list;
-    list = getDefinitions(word.toLowerCase(), null, null, null, null, null, null, "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5");
+    String apiKey = properties.getProperty("apiKey");
+    list = getDefinitions(word.toLowerCase(), null, null, null, null, null, null, apiKey);
     if (list.size() == 0) {
-      list = getDefinitions(word, null, null, null, null, null, null, "a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5");
+      list = getDefinitions(word, null, null, null, null, null, null, apiKey);
     }
     return list;
   }

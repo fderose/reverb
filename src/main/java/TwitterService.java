@@ -10,10 +10,13 @@ import java.util.Properties;
 
 public class TwitterService {
 
+  private final Properties properties;
+
+  public TwitterService(Properties properties) {
+    this.properties = properties;
+  }
+
   private Configuration getConfiguration() throws IOException {
-    Properties properties = new Properties();
-    InputStream inputStream = getClass().getClassLoader().getResourceAsStream("oauth.properties");
-    properties.load(inputStream);
     ConfigurationBuilder cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
       .setOAuthConsumerKey(properties.getProperty("OAuthConsumerKey"))

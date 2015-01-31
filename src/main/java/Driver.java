@@ -3,10 +3,8 @@ import com.wordnik.client.model.Definition;
 import twitter4j.TwitterException;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.io.InputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Driver {
@@ -19,8 +17,12 @@ public class Driver {
     }
     String username = args[0];
 
-    TwitterService twitterService = new TwitterService();
-    WordnikService wordnikService = new WordnikService();
+    Properties properties = new Properties();
+    InputStream inputStream = Driver.class.getClassLoader().getResourceAsStream("app.properties");
+    properties.load(inputStream);
+
+    TwitterService twitterService = new TwitterService(properties);
+    WordnikService wordnikService = new WordnikService(properties);
     SortedMap<String, List<Definition>> definitionMap = new TreeMap<>(new WordComparator());
 
     for (String tweet : twitterService.getTweetsForUser(username)) {
