@@ -3,6 +3,7 @@ import com.wordnik.client.common.ApiException;
 import com.wordnik.client.common.ApiInvoker;
 import com.wordnik.client.model.Definition;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +42,11 @@ public class WordnikService {
       String response = apiInvoker.getInstance().invokeAPI("http://api.wordnik.com", path, "GET", queryParams, null, headerParams);
       if(response != null){
         return (List<Definition>) ApiInvoker.deserialize(response, "List", Definition.class);
+      } else {
+        return Collections.emptyList();
       }
-      else {
-        return null;
-      }
-    } catch (ApiException ex) {
-      if(ex.getCode() == 404) {
-        return null;
-      }
-      else {
-        throw ex;
-      }
+    } catch (Exception ex) {
+      return Collections.emptyList();
     }
   }
 

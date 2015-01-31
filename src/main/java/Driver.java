@@ -22,7 +22,9 @@ public class Driver {
     for (String tweet : twitterService.getTweetsForUser(username)) {
       List<String> tweetWords = Arrays.asList(tweet.split(" "));
       List<String> filteredWords = tweetWords.stream().
-        filter(w -> !StopWords.getStopWords().contains(w.toLowerCase()) && !definitionMap.keySet().contains(w)).
+        filter(w -> !StopWords.getStopWords().contains(w.toLowerCase()) && !w.startsWith("http://") && !definitionMap.keySet().contains(w)).
+        map(w -> w.replaceAll("[.,?!#@]", "")).
+        filter(w -> !w.isEmpty()).
         collect(Collectors.toList());
       for (String tweetWord : filteredWords) {
         definitionMap.put(tweetWord, wordnikService.getDefinitions(tweetWord));
