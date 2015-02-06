@@ -12,7 +12,7 @@ public class Driver {
   public static void main(String[] args) throws TwitterException, ApiException, IOException {
 
     if (args.length != 1) {
-      System.out.println("Usage: Driver <username>");
+      System.err.println("Usage: Driver <username>");
       System.exit(-1);
     }
     String username = args[0];
@@ -26,7 +26,7 @@ public class Driver {
     SortedMap<String, List<Definition>> definitionMap = new TreeMap<>(new WordComparator());
 
     for (String tweet : twitterService.getTweetsForUser(username)) {
-      List<String> tweetWords = Arrays.asList(tweet.split("[ \n\t]+"));
+      List<String> tweetWords = Arrays.asList(tweet.split("[ \n\t]+")); // You would want a more sophisticated tokenizer/analyzer here
       List<String> filteredWords = tweetWords.stream().
         filter(w -> !StopWords.getStopWords().contains(w.toLowerCase()) && !w.startsWith("http://") && !definitionMap.keySet().contains(w)).
         map(w -> w.replaceAll("[.,?!#@:]", "")).

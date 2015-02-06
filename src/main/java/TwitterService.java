@@ -17,6 +17,10 @@ public class TwitterService {
   }
 
   private Configuration getConfiguration() throws IOException {
+    /**
+     * see https://apps.twitter.com/app/7856593/show
+     */
+
     ConfigurationBuilder cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
       .setOAuthConsumerKey(properties.getProperty("OAuthConsumerKey"))
